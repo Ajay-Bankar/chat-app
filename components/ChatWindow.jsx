@@ -79,7 +79,7 @@ const ChatWindow = ({ contact, onBack }) => {
             className="p-5 bg-blue-500 text-white rounded-full"
             onClick={sendMessage}
           >
-           <IoSend className=' text-[24px]' />
+           <IoSend className=' text-[24px] ' />
           </button>
         </div>
       </div>
