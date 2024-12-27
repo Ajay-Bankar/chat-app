@@ -37,6 +37,7 @@ export const useMessages = (contactId) => {
         }))
         .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   
+      // Ensure the payload matches the expected shape of Message[]
       dispatch({ type: 'SET_MESSAGES', payload: contactMessages });
     }
   }, [data?.message, contactId]);
