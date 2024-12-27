@@ -1,47 +1,23 @@
-import { useState, useEffect, useReducer } from 'react';
-import { init, id } from '@instantdb/react'; // Import id directly
+import { useState, useMemo } from 'react';
+import { init, id } from '@instantdb/react';
 
 const db = init({
   appId: process.env.NEXT_PUBLIC_INSTANTDB_APP_ID,
 });
 
-const messageReducer = (state, action) => {
-  switch (action.type) {
-    case 'ADD_MESSAGE':
-      return [...state, action.payload];
-    case 'SET_MESSAGES':
-      return action.payload;
-    case 'CLEAR_MESSAGES':
-      return [];
-    default:
-      return state;
-  }
-};
-
 export const useMessages = (contactId) => {
-  const [messages, dispatch] = useReducer(messageReducer, []);
-  const [newMessage, setNewMessage] = useState('');
-
   const { isLoading, error, data } = db.useQuery({
     message: {},
   });
 
-  useEffect(() => {
-    if (data?.message) {
-      const contactMessages = data.message
-        .filter((msg) => msg.contactId === contactId)
-        .map((msg) => ({
-          contactId: msg.contactId,
-          text: msg.text,
-          createdAt: msg.createdAt,
-        }))
-        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-  
-      // Ensure the payload matches the expected shape of Message[]
-      dispatch({ type: 'SET_MESSAGES', payload: contactMessages });
-    }
+  const [newMessage, setNewMessage] = useState('');
+
+  const sortedMessages = useMemo(() => {
+    if (!data?.message) return [];
+    return data.message
+      .filter((msg) => msg.contactId === contactId)
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }, [data?.message, contactId]);
-  
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !contactId) return;
@@ -55,7 +31,7 @@ export const useMessages = (contactId) => {
       });
 
       await db.transact(tx);
-      setNewMessage('');
+      setNewMessage(''); // Clear the input field after sending the message
     } catch (error) {
       console.error('Error sending message:', error?.message || error);
       throw error;
@@ -63,11 +39,11 @@ export const useMessages = (contactId) => {
   };
 
   return {
-    messages,
+    messages: sortedMessages,
+    isLoading,
+    error,
     newMessage,
     setNewMessage,
     sendMessage,
-    isLoading,
-    error,
   };
 };
