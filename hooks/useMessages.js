@@ -28,21 +28,19 @@ export const useMessages = (contactId) => {
 
   useEffect(() => {
     if (data?.message) {
-      // Ensure each message has contactId, text, and createdAt
       const contactMessages = data.message
-        .filter((msg) => msg.contactId === contactId) // Filter messages by contactId
+        .filter((msg) => msg.contactId === contactId)
         .map((msg) => ({
           contactId: msg.contactId,
           text: msg.text,
           createdAt: msg.createdAt,
         }))
-        .sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        ); // Sort by createdAt
-
-      dispatch({ type: 'SET_MESSAGES', payload: contactMessages }); // Dispatch filtered and sorted messages
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+  
+      dispatch({ type: 'SET_MESSAGES', payload: contactMessages });
     }
   }, [data?.message, contactId]);
+  
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !contactId) return;
