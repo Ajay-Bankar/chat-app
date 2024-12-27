@@ -71,3 +71,6 @@ Flexbox: To create flexible layouts that adjust based on screen size.
 Responsive Classes: Tailwind’s responsive design classes ensure the app looks good on all devices (e.g., md:flex, lg:grid, sm:hidden).
 Local Storage and Offline Capabilities
 The app uses IndexedDB to store chat data locally, allowing users to continue using the app even without an internet connection. Messages are stored in IndexedDB until a connection is re-established, at which point they are synced with InstantDB.
+
+
+
