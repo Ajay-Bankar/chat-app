@@ -32,7 +32,7 @@ export default function Home() {
         <Loader /> 
       ) : (
         isSmallScreen ? (
-          <div className="h-full">
+          <div className="h-full ">
             {selectedContact ? (
               <ChatWindow contact={selectedContact} onBack={handleBack} />
             ) : (
