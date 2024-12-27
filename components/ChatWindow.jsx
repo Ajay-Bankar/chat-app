@@ -38,19 +38,20 @@ const ChatWindow = ({ contact }) => {
       </div>
 
       <div className="flex-1 p-2 overflow-y-auto">
-        {messages.map((msg) => (
-          <div key={msg.id} className="p-2 bg-slate-200 my-2 rounded-md">
-            <p>{msg.text}</p>
-            <p className="text-xs text-gray-500 mt-1">
-              {new Date(msg.createdAt).toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-              })}
-            </p>
-          </div>
-        ))}
-      </div>
+  {messages.map((msg, index) => (
+    <div key={msg.id || index} className="p-2 bg-slate-200 my-2 rounded-md">
+      <p>{msg.text}</p>
+      <p className="text-xs text-gray-500 mt-1">
+        {new Date(msg.createdAt).toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        })}
+      </p>
+    </div>
+  ))}
+</div>
+
 
       <div className="flex gap-2 p-4 bg-gray-100 ">
         <input
