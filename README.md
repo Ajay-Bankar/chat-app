@@ -72,5 +72,26 @@ Responsive Classes: Tailwind’s responsive design classes ensure the app looks 
 Local Storage and Offline Capabilities
 The app uses IndexedDB to store chat data locally, allowing users to continue using the app even without an internet connection. Messages are stored in IndexedDB until a connection is re-established, at which point they are synced with InstantDB.
 
+Setup Instructions:
+1. Prerequisites
+Ensure the following are installed on your system:
 
+Node.js (v16 or higher)
+npm (Node Package Manager)
+Git
 
+2. Clone the Repository
+Run the following command in your terminal:
+
+git clone [https://github.com/Ajay-Bankar/chat-app.git]
+cd [chat-app]
+
+3. Install Dependencies
+Install all necessary packages using npm:
+npm install
+
+4. Start the Application
+Run the development server:
+npm run dev
+http://localhost:3000
+and open 
