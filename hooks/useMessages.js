@@ -2,7 +2,7 @@ import { useState, useEffect, useReducer } from 'react';
 import { init, id } from '@instantdb/react'; // Import id directly
 
 const db = init({
-    appId: process.env.NEXT_PUBLIC_INSTANTDB_APP_ID
+  appId: process.env.NEXT_PUBLIC_INSTANTDB_APP_ID,
 });
 
 const messageReducer = (state, action) => {
@@ -20,7 +20,7 @@ const messageReducer = (state, action) => {
 
 export const useMessages = (contactId) => {
   const [messages, dispatch] = useReducer(messageReducer, []);
-  const [newMessage, setNewMessage] = useState("");
+  const [newMessage, setNewMessage] = useState('');
 
   const { isLoading, error, data } = db.useQuery({
     message: {},
@@ -31,7 +31,14 @@ export const useMessages = (contactId) => {
       // Ensure each message has contactId, text, and createdAt
       const contactMessages = data.message
         .filter((msg) => msg.contactId === contactId) // Filter messages by contactId
-        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()); // Sort by createdAt
+        .map((msg) => ({
+          contactId: msg.contactId,
+          text: msg.text,
+          createdAt: msg.createdAt,
+        }))
+        .sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        ); // Sort by createdAt
 
       dispatch({ type: 'SET_MESSAGES', payload: contactMessages }); // Dispatch filtered and sorted messages
     }
@@ -41,7 +48,7 @@ export const useMessages = (contactId) => {
     if (!newMessage.trim() || !contactId) return;
 
     try {
-      const messageId = id(); 
+      const messageId = id();
       const tx = db.tx.message[messageId].update({
         contactId,
         text: newMessage,
@@ -49,9 +56,9 @@ export const useMessages = (contactId) => {
       });
 
       await db.transact(tx);
-      setNewMessage("");
+      setNewMessage('');
     } catch (error) {
-      console.error("Error sending message:", error?.message || error);
+      console.error('Error sending message:', error?.message || error);
       throw error;
     }
   };
@@ -62,6 +69,6 @@ export const useMessages = (contactId) => {
     setNewMessage,
     sendMessage,
     isLoading,
-    error
+    error,
   };
 };
