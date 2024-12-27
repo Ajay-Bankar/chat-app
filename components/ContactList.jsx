@@ -22,7 +22,7 @@ const ContactList = ({ onContactClick, selectedContactId }) => {
   if (error) return <div>Error fetching contacts: {error.message}</div>;
 
   return (
-    <div className="w-full flex flex-col h-full">
+    <div className="w-full flex flex-col h-full ">
 
       {/* header start */}
       <div className="sticky top-0 bg-white border-b shadow-sm z-10">
