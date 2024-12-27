@@ -1,12 +1,9 @@
-// hooks/useMessages.ts
 import { useState, useEffect, useReducer } from 'react';
 import { init, id } from '@instantdb/react'; // Import id directly
-
 
 const db = init({
     appId: process.env.NEXT_PUBLIC_INSTANTDB_APP_ID
 });
-
 
 const messageReducer = (state, action) => {
   switch (action.type) {
@@ -31,10 +28,12 @@ export const useMessages = (contactId) => {
 
   useEffect(() => {
     if (data?.message) {
+      // Ensure each message has contactId, text, and createdAt
       const contactMessages = data.message
-        .filter((msg) => msg.contactId === contactId)
-        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-      dispatch({ type: 'SET_MESSAGES', payload: contactMessages });
+        .filter((msg) => msg.contactId === contactId) // Filter messages by contactId
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()); // Sort by createdAt
+
+      dispatch({ type: 'SET_MESSAGES', payload: contactMessages }); // Dispatch filtered and sorted messages
     }
   }, [data?.message, contactId]);
 
